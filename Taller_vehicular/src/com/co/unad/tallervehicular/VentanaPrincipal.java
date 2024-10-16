@@ -5,6 +5,7 @@
 package com.co.unad.tallervehicular;
 
 import PaqueteAgenda.DatosVehiculos;
+import java.awt.Frame;
 import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -14,12 +15,15 @@ import javax.swing.JLabel;
  *
  * @author CARLOS
  */
-public class VentanaPrincipal extends javax.swing.JFrame {
-
+public class VentanaPrincipal extends javax.swing.JDialog {
+    
+    Frame padre = null;
     /**
      * Creates new form VentanaPrincipalM
      */
-    public VentanaPrincipal() {
+    public VentanaPrincipal(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        padre = parent;
         initComponents();
         setImageLabel(imgPrincipal, getClass().getResource("/resources/logo.png"));
         setLocationRelativeTo(null);
@@ -43,8 +47,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(400, 400));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setSize(new java.awt.Dimension(400, 352));
 
@@ -121,22 +124,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        DatosPropietario ventanaP = new DatosPropietario(this,true);
+        DatosPropietario ventanaP = new DatosPropietario(padre,true);
         ventanaP.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        DatosServicios ventanaS = new DatosServicios(this,true);
+        DatosServicios ventanaS = new DatosServicios(padre,true);
         ventanaS.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        DatosVehiculos ventanaV = new DatosVehiculos(this,true);
+        DatosVehiculos ventanaV = new DatosVehiculos(padre,true);
         ventanaV.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        DatosNuevoServicio ventanaNS = new DatosNuevoServicio(this,true);
+        DatosNuevoServicio ventanaNS = new DatosNuevoServicio(padre,true);
         ventanaNS.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -169,10 +172,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VentanaPrincipal().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            VentanaPrincipal dialog = new VentanaPrincipal(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
     private void setImageLabel(JLabel img, URL ruta){
