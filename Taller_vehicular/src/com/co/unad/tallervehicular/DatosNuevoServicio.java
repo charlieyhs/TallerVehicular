@@ -5,6 +5,7 @@
  */
 package com.co.unad.tallervehicular;
 
+import com.co.unad.tallervehicular.conexionbd.Conexionbd;
 import java.awt.Dimension;
 import java.util.Calendar;
 import java.util.Date;
@@ -139,6 +140,11 @@ public class DatosNuevoServicio extends javax.swing.JDialog {
         jLabel3.setText("Placa:");
 
         inputPlaca.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        inputPlaca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputPlacaActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Tipo:");
 
@@ -329,6 +335,11 @@ public class DatosNuevoServicio extends javax.swing.JDialog {
 
         btnGuardar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnRegresar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnRegresar.setText("Regresar");
@@ -369,6 +380,38 @@ public class DatosNuevoServicio extends javax.swing.JDialog {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void inputPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPlacaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputPlacaActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        Conexionbd conebd = new Conexionbd();
+        if(!conebd.placaExiste(inputPlaca.getText())){
+            conebd.guardarVehiculo(inputPlaca.getText(), 
+                    (String)tipoVehiculo.getSelectedItem(), "Bueno");
+        }
+        if(!conebd.cedulaExiste(inputCedula.getText())){
+            conebd.guardarPropietario(inputCedula.getText(), inputNombresApellidos.getText(), 
+                    inputDireccion.getText(), inputTelefono.getText(), 
+                    inputCorreoElectronico.getText());
+        }
+        String tipoCosto = (String)costoServicio.getSelectedItem();
+        double valorCosto = 0;
+        if(tipoCosto.equals("Mano de obra")){
+            if(((String)tipoVehiculo.getSelectedItem()).equals("Automóvil")){
+                valorCosto = 20_000;
+            }else if(((String)tipoVehiculo.getSelectedItem()).equals("Camioneta")){
+                valorCosto = 30_000;
+            }
+        }
+        Date fecha_ingreso = (Date)fechaIngreso.getValue();
+        Date fecha_entrega = (Date)fechaEntrega.getValue();
+        int horas = (int)horasTrabajo.getValue();
+        conebd.guardarServicio((String)motivoIngreso.getSelectedItem(), 
+                fecha_ingreso, fecha_entrega, (valorCosto*horas), 
+                horas, inputPlaca.getText(), inputCedula.getText());
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
