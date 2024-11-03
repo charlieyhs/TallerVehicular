@@ -5,10 +5,12 @@
  */
 package com.co.unad.tallervehicular;
 
+import com.co.unad.tallervehicular.conexionbd.Conexionbd;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,24 @@ public class DatosServicios extends javax.swing.JDialog {
     public DatosServicios(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         cargarModeloTabla();
+        Conexionbd conebd = new Conexionbd();
+        
+        List<Conexionbd.Servicio> servicios = conebd.consultarServicios();
+
+        // Limpiar la tabla antes de agregar nuevos datos
+        modeloTabla.setRowCount(0);
+        for (Conexionbd.Servicio servicio : servicios) {
+            Object[] row = {
+                servicio.getCedula(),
+                servicio.getPlaca(),
+                servicio.getFechaIngreso(),
+                servicio.getFechaEntrega(),
+                servicio.getMotivoIngreso(),
+                servicio.getCosto(),
+                servicio.getHorasTrabajo()
+            };
+            modeloTabla.addRow(row);
+        }
         
         initComponents();
         setLocationRelativeTo(null);
@@ -37,6 +57,7 @@ public class DatosServicios extends javax.swing.JDialog {
         modeloTabla.addColumn("Placa Vehiculo");
         modeloTabla.addColumn("Fecha ingreso");
         modeloTabla.addColumn("Fecha entrega");
+        modeloTabla.addColumn("Motivo");
         modeloTabla.addColumn("Costo");
         modeloTabla.addColumn("Horas trabajo");
     }
