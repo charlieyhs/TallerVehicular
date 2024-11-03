@@ -5,7 +5,9 @@
  */
 package com.co.unad.tallervehicular;
 
+import com.co.unad.tallervehicular.conexionbd.Conexionbd;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
  *
@@ -21,6 +23,22 @@ public class DatosPropietario extends javax.swing.JDialog {
     public DatosPropietario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         cargarModeloTabla();
+        Conexionbd conebd = new Conexionbd();
+        
+        List<Conexionbd.Propietario> propietarios = conebd.consultarPropietarios();
+        
+        // Limpiar la tabla antes de agregar nuevos datos
+        modeloTabla.setRowCount(0);
+        for (Conexionbd.Propietario propietario : propietarios) {
+            Object[] row = {
+                propietario.getCedula(),
+                propietario.getNombres(),
+                propietario.getDireccion(),
+                propietario.getTelefono(),
+                propietario.getCorreo()
+            };
+            modeloTabla.addRow(row);
+        }
         
         initComponents();
         setLocationRelativeTo(null);
@@ -29,11 +47,9 @@ public class DatosPropietario extends javax.swing.JDialog {
     private void cargarModeloTabla(){
         modeloTabla.addColumn("Cédula");
         modeloTabla.addColumn("Nombres y apellidos");
-        modeloTabla.addColumn("Nro tarjeta propiedad");
         modeloTabla.addColumn("Dirección");
         modeloTabla.addColumn("Teléfono");
         modeloTabla.addColumn("Correo electrónico");
-        modeloTabla.addColumn("Placa vehículo");
     }
     
     /**
