@@ -5,10 +5,12 @@
  */
 package PaqueteAgenda;
 
+import com.co.unad.tallervehicular.conexionbd.Conexionbd;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -27,7 +29,20 @@ public class DatosVehiculos extends javax.swing.JDialog {
     public DatosVehiculos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         cargarModeloTabla();
+        Conexionbd conebd = new Conexionbd();
         
+        List<Conexionbd.Vehiculo> vehiculos = conebd.consultarVehiculos();
+        
+        // Limpiar la tabla antes de agregar nuevos datos
+        modeloTabla.setRowCount(0);
+        for (Conexionbd.Vehiculo vehiculo : vehiculos) {
+            Object[] row = {
+                vehiculo.getPlaca(),
+                vehiculo.getTipo(),
+                vehiculo.getEstado()
+            };
+            modeloTabla.addRow(row);
+        }
         initComponents();
         setLocationRelativeTo(null);
     }
