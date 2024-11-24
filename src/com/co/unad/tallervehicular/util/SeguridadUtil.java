@@ -4,26 +4,29 @@
  */
 package com.co.unad.tallervehicular.util;
 
-import java.security.MessageDigest;
+
+import java.security.SecureRandom;
+import java.util.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
  * @author Charlie
  */
 public class SeguridadUtil {
-     public static String hashPassword(String password) {
+     public static String hashPassword(String password, String salt) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashedBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
+            return DigestUtils.sha256Hex(password + salt);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+    // Método para generar un salt aleatorio por si hay usuarios con la misma contraseña
+    public static String generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] saltBytes = new byte[16];
+        random.nextBytes(saltBytes);
+        return Base64.getEncoder().encodeToString(saltBytes);
+    }
 }

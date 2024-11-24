@@ -11,6 +11,7 @@ package com.co.unad.tallervehicular.DTO;
 public class UsuarioDTO {
     private String usuario;
     private String password;
+    private String saltpass;
 
     public String getUsuario() {
         return usuario;
@@ -26,6 +27,14 @@ public class UsuarioDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSaltpass() {
+        return saltpass;
+    }
+
+    public void setSaltpass(String saltpass) {
+        this.saltpass = saltpass;
     }
     
     

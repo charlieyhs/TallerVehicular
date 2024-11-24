@@ -43,13 +43,15 @@ public class UsuarioControlador extends Conexionbd{
                     "El usuario ya existe. Por favor, elige otro nombre de usuario.");
             return false;
         }
-        String sql = "INSERT INTO usuarios (usuario, password) VALUES (?, ?)";
+        String sql = "INSERT INTO usuarios (usuario, password, saltpass) VALUES (?, ?, ?)";
 
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            String hashedPassword = SeguridadUtil.hashPassword(usuario.getPassword()); // Encriptar la contraseña
+            String salt = SeguridadUtil.generateSalt();
+            String hashedPassword = SeguridadUtil.hashPassword(usuario.getPassword(), salt); // Encriptar la contraseña
             stmt.setString(1, usuario.getUsuario());
             stmt.setString(2, hashedPassword);
+            stmt.setString(3, salt);
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Usuario insertado correctamente.");
             return true;
@@ -59,15 +61,16 @@ public class UsuarioControlador extends Conexionbd{
         return false;
     }
     public boolean validarUsuario(String usuario, String password) {
-        String sql = "SELECT password FROM usuarios WHERE usuario = ?";
+        String sql = "SELECT password, saltpass FROM usuarios WHERE usuario = ?";
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, usuario);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    String hashedPassword = SeguridadUtil.hashPassword(password);
+                    String saltBd = rs.getString("saltpass");
+                    String hashedPassword = SeguridadUtil.hashPassword(password, saltBd);
                     
                     if(hashedPassword.equals(rs.getString("password"))){
                        return true;

@@ -7,6 +7,7 @@ package com.co.unad.tallervehicular;
 import com.co.unad.tallervehicular.DTO.UsuarioDTO;
 import com.co.unad.tallervehicular.conexionbd.Conexionbd;
 import com.co.unad.tallervehicular.controlador.UsuarioControlador;
+import com.co.unad.tallervehicular.util.ObjectsUtil;
 import javax.swing.JOptionPane;
 
 /**
@@ -142,7 +143,7 @@ public class Registro extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String usuario = textusuario.getText();
-        if(usuario == null || usuario.trim().equals("")){
+        if(ObjectsUtil.vacio(usuario)){
             JOptionPane.showMessageDialog(null, 
                     "Debe ingresar el usuario.");
             return;
@@ -150,7 +151,7 @@ public class Registro extends javax.swing.JDialog {
         char[] password = textpass.getPassword();
         String passwordStr = new String(password);
         
-        if(passwordStr.trim().equals("")){
+        if(ObjectsUtil.vacio(passwordStr)){
             JOptionPane.showMessageDialog(null, 
                     "Debe ingresar la contraseña.");
             return;
@@ -158,7 +159,7 @@ public class Registro extends javax.swing.JDialog {
         char[] password2 = textpass2.getPassword();
         String passwordStr2 = new String(password2);
         
-        if(passwordStr2.trim().equals("")){
+        if(ObjectsUtil.vacio(passwordStr2)){
             JOptionPane.showMessageDialog(null, 
                     "Debe ingresar la confirmacion de contraseña.");
             return;

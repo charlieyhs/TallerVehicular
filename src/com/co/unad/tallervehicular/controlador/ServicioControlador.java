@@ -95,8 +95,15 @@ public class ServicioControlador extends Conexionbd{
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String motivoIngreso = rs.getString("motivo_ingreso");
-                Date fechaIngreso = sdf.parse(rs.getString("fecha_ingreso"));
-                Date fechaEntrega = sdf.parse(rs.getString("fecha_entrega"));
+                Date fechaIngreso = null;
+                Date fechaEntrega = null;
+                
+                try {
+                    fechaIngreso = sdf.parse(rs.getString("fecha_ingreso"));
+                    fechaEntrega = sdf.parse(rs.getString("fecha_entrega"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 double costo = rs.getDouble("costo");
                 int horasTrabajo = rs.getInt("horas_trabajo");
                 String placa = rs.getString("placa");
